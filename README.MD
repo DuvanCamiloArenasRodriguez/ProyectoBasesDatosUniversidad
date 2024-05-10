@@ -1037,4 +1037,147 @@ A continuación se realizan las diferentes consultas solicitadas por el docente:
     WHERE codigo_sexo = 2;
     ```
 
-    
+
+
+
+### Procedimientos Almacenados
+
+```mysql
+-- Procedimientos
+    -- Insertar departamento
+DELIMITER $$
+DROP PROCEDURE IF EXISTS insertarDepartamento
+CREATE PROCEDURE insertarDepartamento(
+    IN id_departamento INT(10)
+    IN nombre_departamento VARCHAR(50)
+)
+BEGIN
+    INSERT INTO departamento VALUES (NULL, nombre_departamento);
+END $$
+DELIMITER ;
+
+CALL insertarDepartamento('Ciencias Humanas');
+
+    -- Insertar Ciudad
+DELIMITER $$
+DROP PROCEDURE IF EXISTS insertarCiudad $$ 
+CREATE PROCEDURE insertarCiudad(
+    IN id_ciudad VARCHAR(5),
+    IN nombre_ciudad VARCHAR(20)
+)
+BEGIN
+    INSERT INTO ciudad (id_ciudad, nombre_ciudad) VALUES (id_ciudad, nombre_ciudad);
+END $$
+
+DELIMITER ;
+
+CALL insertarCiudad(0500, 'Bogotá');
+
+    -- Insertar grado
+DELIMITER $$
+CREATE PROCEDURE insertarGrado(
+    IN id_grado INT,
+    IN nombre_grado VARCHAR(100)
+)
+BEGIN
+    INSERT INTO grado (id_grado, nombre_grado) VALUES (id_grado, nombre_grado);
+END $$
+DELIMITER ;
+
+CALL InsertarGrado(1, 'Grado en Ingeniería Biomédica (Plan 2023)');
+
+    -- Insertar curso escolar
+DELIMITER $$
+CREATE PROCEDURE insertarCursoEscolar(
+    IN id_curso_escolar INT,
+    IN anyo_inicio YEAR(4),
+    IN anyo_fin YEAR(4)
+)
+BEGIN
+    INSERT INTO curso_escolar (id_curso_escolar, anyo_inicio, anyo_fin) VALUES (id_curso_escolar, anyo_inicio, anyo_fin);
+END $$
+DELIMITER ;
+
+CALL InsertarCursoEscolar(1, '2024', '2025');
+
+    -- Insertar Alumno
+DELIMITER $$
+CREATE PROCEDURE InsertarAlumno(
+    IN id_alumno INT,
+    IN nif_alumno VARCHAR(9),
+    IN nombre_alumno VARCHAR(25),
+    IN apellido1 VARCHAR(30),
+    IN apellido2 VARCHAR(30),
+    IN fecha_nacimiento_al DATE,
+    IN codigo_sexo INT
+)
+BEGIN
+    INSERT INTO alumno (id_alumno, nif_alumno, nombre_alumno, apellido1, apellido2, fecha_nacimiento_al, codigo_sexo) VALUES (id_alumno, nif_alumno, nombre_alumno, apellido1, apellido2, fecha_nacimiento_al, codigo_sexo);
+END $$
+DELIMITER ;
+
+CALL InsertarAlumno(NULL, '12345678Z', 'Juan', 'Pérez', 'Gómez', '2000-01-01', 1);
+
+    -- Mostrar alumnos
+DELIMITER $$
+CREATE PROCEDURE mostrarAlumnos()
+BEGIN
+    SELECT apellido1, apellido2, nombre_alumno
+    FROM alumno
+    ORDER BY apellido1 ASC, apellido2 ASC, nombre_alumno ASC;
+END $$
+DELIMITER ;
+
+    --  Mostrar asignaturas
+    DELIMITER $$
+CREATE PROCEDURE mostrarAsignaturas()
+BEGIN 
+    SELECT id_asignatura, nombre_asignatura, creditos, curso, cuatrimestre, id_profesor_asignatura, id_grado_asignatura, codigo_tipo_asignatura
+    FROM asignatura
+END $$
+DELIMITER ;
+
+    -- Mostrar Ciudad
+DELIMITER $$
+CREATE PROCEDURE mostrarCiudad()
+BEGIN
+    SELECT id_ciudad, nombre_ciudad
+    FROM ciudad
+END $$
+DELIMITER ;
+
+    -- Actualizar alumno
+DELIMITER $$
+CREATE PROCEDURE actualizarAlumno(
+    IN id_alumno INT,
+    IN nif_alumno VARCHAR(9),
+    IN nombre_alumno VARCHAR(25),
+    IN apellido1 VARCHAR(30),
+    IN apellido2 VARCHAR(30),
+    IN fecha_nacimiento_al DATE
+    IN codigo_sexo
+)
+BEGIN
+    UPDATE alumno 
+    SET nif_alumno = nif_alumno,
+        nombre_alumno = nombre_alumno,
+        apellido1 = apellido1,
+        apellido2 = apellido2,
+        fecha_nacimiento_al = fecha_nacimiento_al,
+        codigo_sexo = codigo_sexo
+    WHERE
+        id_alumno = id_alumno;
+END $$
+DELIMITER ;
+
+    -- Eliminar alumno
+DELIMITER $$
+CREATE PROCEDURE eliminarAlumno(
+    IN id
+)
+BEGIN
+    DELETE FROM alumno WHERE id_alumno = id;
+END $$
+DELIMITER ;
+```
+
